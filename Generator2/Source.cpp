@@ -6,7 +6,6 @@
 #include <fstream>
 #include <regex>
 #include <functional>
-#include <conio.h>
 
 using namespace std;
 
@@ -430,6 +429,6 @@ int main()
 		cout <<setfill(' ')<<setw(21) << right << answers.back().integer_part+',' +answers.back().fraction_part ;
 	}
 
-	_getch();
+	getchar();
 	return 0;
 }
