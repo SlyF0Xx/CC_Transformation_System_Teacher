@@ -3,7 +3,7 @@
 #include <string>
 #include <math.h>
 #include <vector>
-#include <Windows.h>
+#include <fstream>
 #include <regex>
 #include <functional>
 #include <conio.h>
@@ -237,9 +237,27 @@ bool chek(Number input, Number answer)
 	}
 }
 
+
+string input_ex(const char* Inout_str, regex ex, const char* Err)
+{
+	string output;
+	cout << Inout_str << endl;
+	cin >> output;														//Проверка ввода с помощью регулярного выражения
+	while (!regex_match(output, ex))	//
+	{
+		cout << endl << Err << endl;
+		cin >> output;
+	}
+	return output;
+}
+
+
 int main()
 {
-	SetConsoleOutputCP(1251);											//Вывод русских символов
+#ifndef Windows
+	setlocale(0,"Russian");											//Вывод русских символов
+#endif // !Windows
+
 	
 	const char* Input_Hash = "Добро пожаловать в систему проверки лабораторной работы №1! \n Введите ID студента ";
 
@@ -249,14 +267,8 @@ int main()
 
 	unsigned int student_hash;
 	string student_hash_str;
+	student_hash_str = input_ex(Input_Hash, ex_hash, Err_Uncorrect_Hash);
 
-	cout << Input_Hash;
-	cin >> student_hash_str;											//Проверка ввода с помощью регулярного выражения
-	while (!regex_match(student_hash_str, ex_hash))
-	{
-		cout << endl << Err_Uncorrect_Hash << endl;
-		cin >> student_hash_str;
-	}
 	student_hash = strtod(student_hash_str.c_str(), 0);
 
 	srand(student_hash);
@@ -265,7 +277,6 @@ int main()
 	Number A;
 	int B, C;
 	vector<Number>answers;
-	
 	string temp;
 
 	for (int i(1); i < 10; i++)
