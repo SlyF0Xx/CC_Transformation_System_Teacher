@@ -253,14 +253,17 @@ string input_ex(const char* Inout_str, regex ex, const char* Err)
 
 int main()
 {
-#ifndef Windows
-	setlocale(0,"Russian");											//Вывод русских символов
-#endif // !Windows
+	#ifdef _WIN32
+		setlocale(0,"Russian");											//Вывод русских символов
+	#endif // Windows
 
 	
 	const char* Input_Hash = "Добро пожаловать в систему проверки лабораторной работы №1! \n Введите ID студента ";
 
 	const char* Err_Uncorrect_Hash = "Некорректный ввод. \n Учтите, что ID состоит исключительно из цифр до 10 символов. \n Пожалуйста, повторите ввод";
+
+	//const char* Exit = "Для выхода нажмите любую клавишу";
+	const char* Choise = "Для проверки результатов нажмите +";
 
 	regex ex_hash("[0-9]{1,10}");
 
@@ -429,6 +432,33 @@ int main()
 		cout <<setfill(' ')<<setw(21) << right << answers.back().integer_part+',' +answers.back().fraction_part ;
 	}
 
-	getchar();
+	
+	char exit_char;
+	cout<<endl << Choise;
+	cin >> exit_char;
+	if(exit_char =='+')
+	{
+		ifstream fin("Result.out");
+		cout << endl << "Student's results:" << endl;
+		int result(0);
+		string fract_part, int_part;
+
+		for (int i(0); i < 9; i++)
+		{
+			//cout << "Task №" << i+1<<" - ";
+			fin >> int_part;
+			fin >> fract_part;
+			result += chek(Number(int_part, fract_part), answers[i]);
+		}
+
+		cout << "Student's score is " << result<<endl;
+	}
+
+	//cout << Exit<<endl;
+
+	#ifdef _WIN32
+		system("PAUSE");
+	#endif // WINDOWS
+
 	return 0;
 }
