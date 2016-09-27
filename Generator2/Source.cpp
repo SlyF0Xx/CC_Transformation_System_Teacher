@@ -9,6 +9,19 @@
 
 using namespace std;
 
+const char* Questions = "Have questions? Make issues on https://github.com/SlyF0Xx/CC_Transformation_System/issues or \n send me a message on email max.tolstukhin@mail.ru \n Please try again";
+
+const char* Hello = "Добро пожаловать в систему проверки лабораторной работы №1! \n Сделано Толстухиным Максимом \n";
+
+const char* Input_Hash = "Введите ID студента ";
+
+const char* Err_Uncorrect_Hash = "Некорректный ввод. \n Учтите, что ID состоит исключительно из цифр до 10 символов. \n Пожалуйста, повторите ввод";
+
+const char* Choise = "Для проверки результатов введите +. В противном случае введите -";
+
+regex ex_hash("[0-9]{1,10}");
+
+
 struct Str_Shift
 {
 	string str;
@@ -24,6 +37,7 @@ struct Str_Shift
 		this->shift = 0;
 	}
 };
+
 
 struct Number
 {
@@ -245,6 +259,7 @@ string input_ex(const char* Inout_str, regex ex, const char* Err)
 	while (!regex_match(output, ex))	//
 	{
 		cout << endl << Err << endl;
+		cout << Questions<<endl;
 		cin >> output;
 	}
 	return output;
@@ -257,21 +272,27 @@ int main()
 		setlocale(0,"Russian");											//Вывод русских символов
 	#endif // Windows
 
-	
-	const char* Input_Hash = "Добро пожаловать в систему проверки лабораторной работы №1! \n Введите ID студента ";
-
-	const char* Err_Uncorrect_Hash = "Некорректный ввод. \n Учтите, что ID состоит исключительно из цифр до 10 символов. \n Пожалуйста, повторите ввод";
-
-	//const char* Exit = "Для выхода нажмите любую клавишу";
-	const char* Choise = "Для проверки результатов нажмите +";
-
-	regex ex_hash("[0-9]{1,10}");
+	cout << Hello;
 
 	unsigned int student_hash;
 	string student_hash_str;
-	student_hash_str = input_ex(Input_Hash, ex_hash, Err_Uncorrect_Hash);
+	
+	char exit_char;
+	cout << endl << Choise;
+	cin >> exit_char;
 
-	student_hash = strtod(student_hash_str.c_str(), 0);
+	ifstream fin;
+
+	if (exit_char == '+')
+	{
+		fin.open("Result.out");
+		fin >> student_hash;	
+	}
+	else
+	{
+		student_hash_str = input_ex(Input_Hash, ex_hash, Err_Uncorrect_Hash);
+		student_hash = strtod(student_hash_str.c_str(), 0);
+	}
 
 	srand(student_hash);
 
@@ -433,12 +454,8 @@ int main()
 	}
 
 	
-	char exit_char;
-	cout<<endl << Choise;
-	cin >> exit_char;
-	if(exit_char =='+')
+	if (exit_char == '+')
 	{
-		ifstream fin("Result.out");
 		cout << endl << "Student's results:" << endl;
 		int result(0);
 		string fract_part, int_part;
@@ -450,11 +467,8 @@ int main()
 			fin >> fract_part;
 			result += chek(Number(int_part, fract_part), answers[i]);
 		}
-
-		cout << "Student's score is " << result<<endl;
+		cout << "Student's score is " << result << endl;
 	}
-
-	//cout << Exit<<endl;
 
 	#ifdef _WIN32
 		system("PAUSE");
