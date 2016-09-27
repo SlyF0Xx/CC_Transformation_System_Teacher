@@ -272,7 +272,6 @@ int main()
 		setlocale(0,"Russian");											//Вывод русских символов
 	#endif // Windows
 
-	
 	cout << Hello;
 
 	unsigned int student_hash;
